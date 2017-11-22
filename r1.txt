@@ -1,0 +1,32 @@
+SELECT `LibelleEquipeA`, `LibelleEquipeB` 
+FROM  `equipea`,'equipeb','matchdujour'
+WHERE equipea.id=matchdujour.id
+and   equipeb.id=matchdujour.id
+
+SELECT LibelleEquipeA, LibelleEquipeB
+FROM  equipea,equipeb,matchdujour
+WHERE equipea.id=matchdujour.mdjEquipeA_id
+and   equipeb.id=matchdujour.mdjEquipeB_id
+
+select libelleJourneeAller from journeealler,matchdujour
+where  journeealler.id=macthdujour.id
+
+select libelleJourneeAller from journeealler,matchdujour
+where  journeealler.id = Mmatchdujour.mdjJourneeAller_id
+
+select libelleJourneeAller from journeealler,matchdujour
+where  journeealler.id=macthdujour.id
+and journeealler.id = Mmatchdujour.mdjJourneeAller_id
+
+select libelleJourneeAller 
+from journeealler,matchdujour 
+where journeealler.id = matchdujour.mdjJourneeAller_id
+
+select libelleEquipeA , libelleEquipeB
+from journeealler,matchdujour,equipea,equipeb
+where journeealler.id = matchdujour.mdjJourneeAller_id
+
+SELECT LibelleEquipeA, LibelleEquipeB,mdjJourneeAller_id
+FROM  equipea,equipeb,matchdujour
+WHERE equipea.id=matchdujour.mdjEquipeA_id
+and   equipeb.id=matchdujour.mdjEquipeB_id

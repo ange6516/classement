@@ -1,0 +1,107 @@
+//REQ 1 Mise à jour Table Ayantdroit relation societaireAD_id
+UPDATE ayantdroit t1 SET societaireAD_id=(
+  SELECT id FROM societaire t2 WHERE t1.Identifiantsoci=t2.id)
+  
+//REQ 2 Mise à jour Table Societaire relation societaireMdReg_id
+UPDATE societaire t1 SET societaireMdReg_id=(
+  SELECT id FROM modereglement t2 WHERE t1.codemodereglement=t2.Codemodereglement) 
+
+//REQ 3 Mise à jour Table Societaire relation societairePerReg_id
+UPDATE societaire t1 SET societairePerReg_id=(
+  SELECT id FROM periodicitereglement t2 WHERE t1.Codeperiodicitereglement=t2.Codeperiodicitereglement)
+  
+//REQ 4 Mise à jour Table Societaire relation societaireSitProf_id
+UPDATE societaire t1 SET societaireSitProf_id=(
+  SELECT id FROM situationprofessionnel t2 WHERE t1.codesp=t2.Codesp)  
+
+//REQ 5 Mise à jour Table Societaire relation societaireOrg_id
+UPDATE societaire t1 SET societaireOrg_id=(
+  SELECT id FROM organisme t2 WHERE t1.codeorg=t2.codeorg) 
+  
+ //REQ 6 Mise à jour Table Societaire relation societaireTarif_id 
+UPDATE societaire t1 SET societaireTarif_id=(
+  SELECT id FROM tarif t2 WHERE t1.Codetarif=t2.Codetarif)  
+
+ //REQ 7 Mise à jour Table Societaire relation societaireSepa_id 
+UPDATE societaire t1 SET societaireSepa_id=(
+  SELECT id FROM Sepa t2 WHERE t1.sepa_num=t2.id) 
+
+//REQ 8 Mise à jour Table Societaire relation societaireSepaVir_id 
+UPDATE societaire t1 SET societaireSepaVir_id=(
+  SELECT id FROM Sepavir t2 WHERE t1.sepa_num_vir=t2.id) 
+  
+//REQ 9 Mise à jour Table Ayantdroit relation TypeParenteAD_id 
+UPDATE Ayantdroit t1 SET TypeParenteAD_id=(
+  SELECT id FROM typeparenteayantdroit t2 WHERE t1.Codetypeparentead=t2.Codetypeparentead)   
+
+//REQ 10 Mise à jour Table Ayantdroit relation TypeNatureAD_id 
+UPDATE Ayantdroit t1 SET TypeNatureAD_id=(
+  SELECT id FROM Natureayantdroit t2 WHERE t1.Codenaturead=t2.Codenaturead)   
+
+//REQ 11 Mise à jour Table Societaire relation ADSepaVir_id 
+UPDATE Ayantdroit t1 SET ADSepaVir_id=(
+  SELECT id FROM Sepavir t2 WHERE t1.sepa_num_vir=t2.id) 
+  
+//REQ 12 Mise à jour Table Adherer relation AdhererSoc_id
+UPDATE Adherer t1 SET AdhererSoc_id=(
+  SELECT id FROM Societaire t2 WHERE t1.Identifiantsoci=t2.id)   
+  
+//REQ 13 Mise à jour Table Affecter relation AffecterOption_id
+UPDATE Affecter t1 SET AffecterOption_id=(
+  SELECT id FROM options t2 WHERE t1.Numoption=t2.id)
+
+//REQ 14 Mise à jour Table Affecter relation AffecterSoc_id
+UPDATE Affecter t1 SET AffecterSoc_id=(
+  SELECT id FROM Societaire t2 WHERE t1.Identifiantsoci=t2.id)    
+  
+ //REQ 15 Mise à jour Table Societaire relation societaireSitFam_id
+UPDATE Societaire t1 SET societaireSitFam_id=(
+  SELECT id FROM situationfamilliale t2 WHERE t1.situationfamilialesoci=t2.Codesf) 
+  
+  // requete migration titulaire compte pour prelevement societaire
+ update Sepa t1 set t1.Sepa_titulaire = (select distinct( t2.Libelle)
+  from compte t2, societaire t3 
+  where t2.codeetab = t3.codeetab
+  and t2.codeguichet= t3.codeguichet
+  and t2.numcompte=t3.numcompte
+  and t1.id = t3.societaireSepa_id)
+  
+// requete migration titulaire compte pour prelevement societaire
+ update Sepavir t1 set t1.Sepa_titulaire_vir = (select distinct( t2.Libelle)
+  from compte t2, societaire t3 
+  where t2.codeetab = t3.com_codeetab
+  and t2.codeguichet= t3.com_codeguichet
+  and t2.numcompte=t3.com_numcompte
+  and t1.id = t3.societaireSepaVir_id
+  ) 
+
+  
+// requete migration titulaire compte pour prelevement ayant droit
+ update Sepavir t1 set t1.Sepa_titulaire_vir = (select distinct( t2.Libelle)
+  from compte t2, ayantdroit t3 
+  where t2.codeetab = t3.codeetab
+  and t2.codeguichet= t3.codeguichet
+  and t2.numcompte=t3.numcompte
+  and t1.id = t3.ADSepaVir_id
+  group by t3.Sepa_Num_Vir)  
+ where t1.Sepa_titulaire_vir ='' 
+  
+UPDATE affecter t1 SET affectersocietaire_id=(
+  SELECT id FROM societaire t2 WHERE t1.Identifiantsoci=t2.id)  
+  
+UPDATE affecter t1 SET affecteroption_id=(
+  SELECT id FROM options t2 WHERE t1.Numoption=t2.id)    
+  
+ 
+  
+UPDATE societaire t1 SET societaireorganisme_id=(
+  SELECT id FROM organisme t2 WHERE t1.codeorg=t2.codeorg)  
+  
+UPDATE societaire t1 SET societaireMdReg_id=(
+  SELECT id FROM modereglement t2 WHERE t1.codemodereglement=t2.Codemodereglement)   
+  
+ 
+
+UPDATE ayantdroit t1 SET typeparenteAD_id=(
+  SELECT id FROM typeparenteayantdroit t2 WHERE t1.Codetypeparentead=t2.Codetypeparentead)   
+
